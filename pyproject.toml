@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "teacher"
+version = "0.1.0"
+description = ""
+authors = ["Artemy Vakhrushev <69428015+TemaSaur@users.noreply.github.com>"]
+license = "GNU GPL v2"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+uvicorn = "^0.32.0"
+fastapi = "^0.115.4"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.13.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
