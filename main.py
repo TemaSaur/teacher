@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
 import os
@@ -16,10 +17,12 @@ server.jinja = Jinja2Templates(directory="templates/")
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 @app.get("/")
-def index(request: Request, name: str):
+def index(request: Request, name: str | None = None):
 	context = {
-		"name": name
+		"name": name or "Default"
 	}
 	return server.jinja.TemplateResponse(
 		request=request,
