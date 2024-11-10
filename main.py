@@ -1,25 +1,35 @@
 from sqlalchemy import create_engine
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
-from repository.user import Querier
 import os
+from repository.users import Querier
+from config import server
 
 
-load_dotenv(".env")
+env = load_dotenv(".env")
 
 engine = create_engine(os.getenv("DATABASE_URL")
-                       .replace("mysql://", "mysql+pymysql://"))
+		.replace("mysql://", "mysql+pymysql://"))
+
+server.jinja = Jinja2Templates(directory="templates/")
 
 app = FastAPI()
 
 @app.get("/")
-def index():
-    return "hello"
+def index(request: Request, name: str):
+	context = {
+		"name": name
+	}
+	return server.jinja.TemplateResponse(
+		request=request,
+		name="index.html",
+		context=context)
 
 
 @app.get("/data")
 def data():
-    with engine.connect() as conn:
-        result = Querier(conn).get_all()
-        return list(result)
+	with engine.connect() as conn:
+		result = Querier(conn).get_all()
+		return list(result)
 
