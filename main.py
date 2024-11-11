@@ -30,6 +30,29 @@ def index(request: Request, name: str | None = None):
 		context=context)
 
 
+@app.get("/study-materials")
+def materials(request: Request):
+	return server.jinja.TemplateResponse(
+		request=request,
+		name="materials.html"
+	)
+
+
+@app.get("/tests")
+def materials(request: Request):
+	return server.jinja.TemplateResponse(
+		request=request,
+		name="tests.html"
+	)
+
+@app.get("/account")
+def materials(request: Request):
+	return server.jinja.TemplateResponse(
+		request=request,
+		name="account.html"
+	)
+
+
 @app.get("/data")
 def data():
 	with engine.connect() as conn:
