@@ -45,6 +45,12 @@ def materials(request: Request):
 		name="tests.html"
 	)
 
+@app.get("/account")
+def materials(request: Request):
+	return server.jinja.TemplateResponse(
+		request=request,
+		name="account.html"
+	)
 
 
 @app.get("/data")
