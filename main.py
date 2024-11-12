@@ -1,10 +1,10 @@
-from fastapi import FastAPI, Request, UploadFile, File
+from fastapi import FastAPI, Request, UploadFile
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
 import os
 from models.user import User
-from models.file import File as DbFile
+from models.file import File
 from config import server
 import pymysql
 
@@ -18,6 +18,7 @@ conn = pymysql.connect(
 	user=os.getenv("DATABASE_USER"),
 	password=os.getenv("DATABASE_PASSWORD"),
 	database=os.getenv("DATABASE_DATABASE"),
+	autocommit=True,
 )
 
 server.conn = conn
@@ -65,10 +66,7 @@ def data():
 
 @app.post("/upload")
 async def upload(file: UploadFile):
-	f = DbFile()
-	f.fname = file.filename
-	f.fsize = file.size
-	f.fdata = await file.read()
+	f = File.read(upload=file)
 	f.upload(conn)
 	conn.commit()
 	return f.id

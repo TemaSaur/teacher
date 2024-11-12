@@ -1,5 +1,7 @@
-from fastapi import Request, APIRouter
+from fastapi import Request, APIRouter, UploadFile, Form
 from config import server
+from models.file import File
+from models.material import Material
 
 router = APIRouter()
 
@@ -15,7 +17,20 @@ def materials(request: Request):
 		context=context
 	)
 
+
 @router.post("/study-materials")
-def create():
-	pass
+async def create(file: UploadFile,
+		title: str = Form(),
+		clas: int = Form(),
+		quarter: int = Form()):
+	f = await File.read(file)
+	f.upload(server.conn)
+	material = Material()
+	material.title = title
+	material.file_id = f.id
+	material.link_url = None
+	material.clas = clas
+	material.quarter = quarter
+	material.create(server.conn)
+	return material
 

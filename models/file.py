@@ -1,5 +1,6 @@
 import uuid
 from pymysql import Connection
+from fastapi import UploadFile
 from .model import Model
 
 """
@@ -22,10 +23,19 @@ class File(Model):
 	def __init__(self, fetched: tuple | None = None):
 		if fetched is None:
 			return
+
 		self.id = fetched[0]
 		self.fname = fetched[1]
 		self.fsize = fetched[2]
 		self.fdata = fetched[3]
+
+	@staticmethod
+	async def read(file: UploadFile):
+		self = File()
+		self.fname = file.filename
+		self.fsize = file.size
+		self.fdata = await file.read()
+		return self
 
 	def upload(self, conn: Connection):
 		sql = """
