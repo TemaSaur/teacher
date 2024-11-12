@@ -8,6 +8,7 @@ from models.file import File as DbFile
 from config import server
 import pymysql
 
+import materials.routes
 
 
 load_dotenv(".env")
@@ -38,23 +39,19 @@ def index(request: Request, name: str | None = None):
 		context=context)
 
 
-@app.get("/study-materials")
-def materials(request: Request):
-	return server.jinja.TemplateResponse(
-		request=request,
-		name="materials.html"
-	)
+app.include_router(materials.routes.router)
 
 
 @app.get("/tests")
-def materials(request: Request):
+def tests(request: Request):
 	return server.jinja.TemplateResponse(
 		request=request,
 		name="tests.html"
 	)
 
+
 @app.get("/account")
-def materials(request: Request):
+def account(request: Request):
 	return server.jinja.TemplateResponse(
 		request=request,
 		name="account.html"
