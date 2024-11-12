@@ -1,10 +1,9 @@
 -- migrate:up
 CREATE TABLE files (
 	id CHAR(36) NOT NULL,
-	fname VARCHAR(255),
-	fsize INT,
-	ftype VARCHAR(63),
-	fdata LONGBLOB,
+	fname VARCHAR(255) NOT NULL,
+	fsize INT NOT NULL,
+	fdata LONGBLOB NOT NULL,
 
 	PRIMARY KEY(id)
 );

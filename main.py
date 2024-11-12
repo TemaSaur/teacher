@@ -1,17 +1,25 @@
-from sqlalchemy import create_engine
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, UploadFile, File
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
 import os
-from repository.users import Querier
+from models.user import User
+from models.file import File as DbFile
 from config import server
+import pymysql
 
 
-env = load_dotenv(".env")
 
-engine = create_engine(os.getenv("DATABASE_URL")
-		.replace("mysql://", "mysql+pymysql://"))
+load_dotenv(".env")
+
+conn = pymysql.connect(
+	host=os.getenv("DATABASE_HOST"),
+	user=os.getenv("DATABASE_USER"),
+	password=os.getenv("DATABASE_PASSWORD"),
+	database=os.getenv("DATABASE_DATABASE"),
+)
+
+server.conn = conn
 
 server.jinja = Jinja2Templates(directory="templates/")
 
@@ -55,7 +63,15 @@ def materials(request: Request):
 
 @app.get("/data")
 def data():
-	with engine.connect() as conn:
-		result = Querier(conn).get_all()
-		return list(result)
+	return User.get_all(conn)
 
+
+@app.post("/upload")
+async def upload(file: UploadFile):
+	f = DbFile()
+	f.fname = file.filename
+	f.fsize = file.size
+	f.fdata = await file.read()
+	f.upload(conn)
+	conn.commit()
+	return f.id
