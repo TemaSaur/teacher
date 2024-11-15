@@ -8,22 +8,22 @@ class MaterialFile(Model):
 	material: Material
 	file: File
 
-	@staticmethod
-	def get_all(conn: Connection):
-		sql = """
-		SELECT S.id, title, file_id, link_url, class, quarter, fsize, fname
-		FROM
-			study_materials AS S
-			LEFT JOIN files AS F ON S.file_id = F.id
-		"""
-
-		with conn.cursor() as cur:
-			cur.execute(sql)
-
-			return [{
-				"material": Material(x[:6]),
-				"file": File(id=x[2], fsize=x[6], fname=x[7])
-			} for x in cur.fetchall()]
+	# @staticmethod
+	# def get_all(conn: Connection):
+	# 	sql = """
+	# 	SELECT S.id, title, file_id, link_url, class, quarter, fsize, fname
+	# 	FROM
+	# 		study_materials AS S
+	# 		LEFT JOIN files AS F ON S.file_id = F.id
+	# 	"""
+	#
+	# 	with conn.cursor() as cur:
+	# 		cur.execute(sql)
+	#
+	# 		return [{
+	# 			"material": Material(x[:6]),
+	# 			"file": File(id=x[2], fsize=x[6], fname=x[7])
+	# 		} for x in cur.fetchall()]
 
 	@staticmethod
 	def get_filtered(conn: Connection, clas: int, quarter: int):
@@ -42,4 +42,20 @@ class MaterialFile(Model):
 				"material": Material(x[:6]),
 				"file": File(id=x[2], fsize=x[6], fname=x[7])
 			} for x in cur.fetchall()]
+
+	@staticmethod
+	def get_file(conn: Connection, material_id: int):
+		sql = """
+		SELECT F.id, F.fname, F.fsize, F.fdata
+		FROM
+			study_materials AS S
+			LEFT JOIN files AS F ON S.file_id = F.id
+		WHERE S.id = %s
+		LIMIT 1
+		"""
+
+		with conn.cursor() as cur:
+			cur.execute(sql, (material_id,))
+
+			return File(cur.fetchone())
 

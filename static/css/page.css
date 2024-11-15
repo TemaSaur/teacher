@@ -84,6 +84,10 @@ form {
 	width: 500px;
 }
 
+.material:hover {
+	color: #000000a0;
+}
+
 .material span {
 	font-size: 2rem;
 	width: 2rem;
