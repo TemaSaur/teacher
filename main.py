@@ -66,7 +66,7 @@ def data():
 
 @app.post("/upload")
 async def upload(file: UploadFile):
-	f = File.read(upload=file)
+	f = await File.read(file)
 	f.upload(conn)
 	conn.commit()
 	return f.id

@@ -33,6 +33,9 @@ class Material(Model):
 		self.clas = fetched[4]
 		self.quarter = fetched[5]
 
+	def __repr__(self):
+		return f"[{self.title}]"
+
 	def create(self, conn: Connection):
 		sql = """
 		INSERT INTO study_materials (title, file_id, link_url, class, quarter)
@@ -45,4 +48,16 @@ class Material(Model):
 			)
 			self.id = cur.lastrowid
 			return self
+		conn.commit()
+
+	@staticmethod
+	def get_all(conn: Connection):
+		sql = """
+		SELECT id, title, file_id, link_url, class, quarter, file.fname
+		FROM study_materials
+		"""
+		with conn.cursor() as cur:
+			cur.execute(sql)
+
+			return [Material(m) for m in cur.fetchall()]
 

@@ -9,6 +9,10 @@
 	margin-bottom: 3rem;
 }
 
+form {
+	margin-bottom: 2rem;
+}
+
 .radio {
 	width: 500px;
 	display: flex;
@@ -25,14 +29,27 @@
 	display: none;
 }
 
-.radio label {
+.radio label,
+.submit {
 	display: inline-block;
-	width: 4rem;
+	min-width: 4rem;
 	text-align: center;
 	padding: .2em 0;
 	background: #00000004;
 	box-shadow: #00000020 0 2px 2px;
 	border-radius: .4rem;
+
+}
+
+.submit {
+	border: none;
+	padding: .2em .9em;
+	font-size: 1rem;
+	display: block;
+	margin: 0 auto;
+	cursor: pointer;
+
+	font-family: Prata;
 }
 
 .radio input[type="radio"]:checked + label {
@@ -51,4 +68,23 @@
 .radio label:hover {
 	background: #00000030;
 	cursor: pointer;
+}
+
+.results {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: .2rem;
+}
+
+.material {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	width: 500px;
+}
+
+.material span {
+	font-size: 2rem;
+	width: 2rem;
 }

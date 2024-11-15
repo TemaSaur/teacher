@@ -1,0 +1,45 @@
+from pymysql import Connection
+from .model import Model
+from .material import Material
+from .file import File
+
+
+class MaterialFile(Model):
+	material: Material
+	file: File
+
+	@staticmethod
+	def get_all(conn: Connection):
+		sql = """
+		SELECT S.id, title, file_id, link_url, class, quarter, fsize, fname
+		FROM
+			study_materials AS S
+			LEFT JOIN files AS F ON S.file_id = F.id
+		"""
+
+		with conn.cursor() as cur:
+			cur.execute(sql)
+
+			return [{
+				"material": Material(x[:6]),
+				"file": File(id=x[2], fsize=x[6], fname=x[7])
+			} for x in cur.fetchall()]
+
+	@staticmethod
+	def get_filtered(conn: Connection, clas: int, quarter: int):
+		sql = """
+		SELECT S.id, title, file_id, link_url, class, quarter, fsize, fname
+		FROM
+			study_materials AS S
+			LEFT JOIN files AS F ON S.file_id = F.id
+		WHERE S.class = %s AND S.quarter = %s
+		"""
+
+		with conn.cursor() as cur:
+			cur.execute(sql, (clas, quarter))
+
+			return [{
+				"material": Material(x[:6]),
+				"file": File(id=x[2], fsize=x[6], fname=x[7])
+			} for x in cur.fetchall()]
+

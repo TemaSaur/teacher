@@ -11,29 +11,62 @@
 		<link href="/static/css/styles.css" rel="stylesheet">
 		<link href="/static/css/page.css" rel="stylesheet">
 		<link rel="icon" href="static/logo.svg" type="image/x-icon">
+		<link rel="stylesheet" href="https://unpkg.com/file-icon-vectors@1.0.0/dist/file-icon-classic.min.css" />
 	</head>
 	<body class="page">
 		{% include "header.html" %}
 		<main class="container">
 			<h1>Учебные материалы</h1>
-			<form action="">
+			<form action="study-materials" method="GET">
 				<div class="radio class-radio">
 					<p>Класс:</p>
-					<input type="radio" name="class" id="class-6"><label for="class-6">6</label>
-					<input type="radio" name="class" id="class-7"><label for="class-7">7</label>
-					<input type="radio" name="class" id="class-8"><label for="class-8">8</label>
-					<input type="radio" name="class" id="class-9"><label for="class-9">9</label>
+
+					{% for i in range(6, 9 + 1) %}
+						<input
+							type="radio"
+							name="class"
+							value="{{ i }}"
+							id="class-{{ i }}"
+							{{ "checked" if class == i|string else "" }}
+						required>
+						<label for="class-{{ i }}">{{i}}</label>
+					{% endfor %}
+
 				</div>
 
 				<div class="radio quarter-radio">
 					<p>Четверть:</p>
-					<input type="radio" name="quarter" id="quarter-1"><label for="quarter-1">I</label>
-					<input type="radio" name="quarter" id="quarter-2"><label for="quarter-2">II</label>
-					<input type="radio" name="quarter" id="quarter-3"><label for="quarter-3">III</label>
-					<input type="radio" name="quarter" id="quarter-4"><label for="quarter-4">IV</label>
+
+					{% for i in range(1, 4 + 1) %}
+						<input
+							type="radio"
+							name="quarter"
+							value="{{ i }}"
+							id="quarter-{{ i }}"
+							{{ "checked" if quarter == i|string else "" }}
+						required>
+						<label for="quarter-{{ i }}">{{i}}</label>
+					{% endfor %}
+
 				</div>
+
+				<button class="submit">Загрузить</button>
 			</form>
 
+			{% if materials is none %}
+				<div>Выберите класс и четверть</div>
+			{% elif materials|length == 0 %}
+				<div>Нет результатов</div>
+			{% else %}
+				<div class="results">
+					{% for m in materials %}
+						<div class="material">
+							<span class="fiv-cla fiv-icon-{{m['file'].fname.split('.')[-1][:3]}}"></span>
+							<p>{{ m['material'].title }}</p>
+						</div>
+					{% endfor %}
+				</div>
+			{% endif %}
 		</main>
 		{% include "footer.html" %}
 	</body>

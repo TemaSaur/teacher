@@ -20,14 +20,29 @@ class File(Model):
 	fsize: int
 	fdata: bytes
 
-	def __init__(self, fetched: tuple | None = None):
-		if fetched is None:
+	def __init__(self,
+			fetched: tuple | None = None,
+			id: uuid.UUID | str | None = None,
+			fname: str | None = None,
+			fsize: int | None = None,
+			fdata: bytes | None = None):
+		if fetched is not None:
+			self.id = fetched[0]
+			self.fname = fetched[1]
+			self.fsize = fetched[2]
+			self.fdata = fetched[3]
 			return
 
-		self.id = fetched[0]
-		self.fname = fetched[1]
-		self.fsize = fetched[2]
-		self.fdata = fetched[3]
+		if isinstance(id, str):
+			id = uuid.UUID(id)
+
+		self.id = id
+		self.fname = fname
+		self.fsize = fsize
+		self.fdata = fdata
+
+	def __repr__(self):
+		return f'[{self.fname}]'
 
 	@staticmethod
 	async def read(file: UploadFile):

@@ -25,5 +25,5 @@ class User(Model):
 		sql = """SELECT id, first_name, last_name FROM users;"""
 		with conn.cursor() as cur:
 			cur.execute(sql)
-			return [User(x) for x in cur.fetchmany()]
+			return [User(x) for x in cur.fetchall()]
 
