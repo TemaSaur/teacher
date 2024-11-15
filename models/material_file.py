@@ -8,23 +8,6 @@ class MaterialFile(Model):
 	material: Material
 	file: File
 
-	# @staticmethod
-	# def get_all(conn: Connection):
-	# 	sql = """
-	# 	SELECT S.id, title, file_id, link_url, class, quarter, fsize, fname
-	# 	FROM
-	# 		study_materials AS S
-	# 		LEFT JOIN files AS F ON S.file_id = F.id
-	# 	"""
-	#
-	# 	with conn.cursor() as cur:
-	# 		cur.execute(sql)
-	#
-	# 		return [{
-	# 			"material": Material(x[:6]),
-	# 			"file": File(id=x[2], fsize=x[6], fname=x[7])
-	# 		} for x in cur.fetchall()]
-
 	@staticmethod
 	def get_filtered(conn: Connection, clas: int, quarter: int):
 		sql = """

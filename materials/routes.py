@@ -16,7 +16,7 @@ def materials(request: Request,
 	materials = None
 	if clas is not None and quarter is not None:
 		materials = MaterialFile.get_filtered(server.conn, clas, quarter)
-	# materials = MaterialFile.get_all(server.conn)
+
 	context = {
 		"materials": materials,
 		"class": clas,
