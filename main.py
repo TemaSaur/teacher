@@ -1,17 +1,27 @@
-from sqlalchemy import create_engine
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, UploadFile
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
 import os
-from repository.users import Querier
+from models.user import User
+from models.file import File
 from config import server
+import pymysql
+
+import materials.routes
 
 
-env = load_dotenv(".env")
+load_dotenv(".env")
 
-engine = create_engine(os.getenv("DATABASE_URL")
-		.replace("mysql://", "mysql+pymysql://"))
+conn = pymysql.connect(
+	host=os.getenv("DATABASE_HOST"),
+	user=os.getenv("DATABASE_USER"),
+	password=os.getenv("DATABASE_PASSWORD"),
+	database=os.getenv("DATABASE_DATABASE"),
+	autocommit=True,
+)
+
+server.conn = conn
 
 server.jinja = Jinja2Templates(directory="templates/")
 
@@ -30,23 +40,19 @@ def index(request: Request, name: str | None = None):
 		context=context)
 
 
-@app.get("/study-materials")
-def materials(request: Request):
-	return server.jinja.TemplateResponse(
-		request=request,
-		name="materials.html"
-	)
+app.include_router(materials.routes.router)
 
 
 @app.get("/tests")
-def materials(request: Request):
+def tests(request: Request):
 	return server.jinja.TemplateResponse(
 		request=request,
 		name="tests.html"
 	)
 
+
 @app.get("/account")
-def materials(request: Request):
+def account(request: Request):
 	return server.jinja.TemplateResponse(
 		request=request,
 		name="account.html"
@@ -55,7 +61,12 @@ def materials(request: Request):
 
 @app.get("/data")
 def data():
-	with engine.connect() as conn:
-		result = Querier(conn).get_all()
-		return list(result)
+	return User.get_all(conn)
 
+
+@app.post("/upload")
+async def upload(file: UploadFile):
+	f = await File.read(file)
+	f.upload(conn)
+	conn.commit()
+	return f.id
