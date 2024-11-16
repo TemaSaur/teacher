@@ -74,7 +74,7 @@ form {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: .2rem;
+	gap: 1rem;
 }
 
 .material {
@@ -82,13 +82,42 @@ form {
 	align-items: center;
 	gap: 1rem;
 	width: 500px;
+	margin-bottom: .7rem;
 }
 
-.material:hover {
+.material:hover,
+p[data-topic]:hover {
 	color: #000000a0;
 }
 
 .material span {
 	font-size: 2rem;
 	width: 2rem;
+}
+
+p[data-topic] {
+	cursor: pointer;
+}
+
+p[data-topic] span {
+	display: inline-block;
+	transform: scale(2.5, 1.5) translate(.6em, -.2em) rotate(180deg);
+}
+
+p[data-topic] span {
+	display: inline-block;
+	transform: scale(2.5, 1.5) translate(.6em, -.2em) rotate(180deg);
+}
+
+p[data-topic].active span {
+	display: inline-block;
+	transform: scale(2.5, 1.5) translate(.6em, .1em);
+}
+
+div[data-topic-results] {
+	display: none;
+}
+
+div[data-topic-results].shown {
+	display: block;
 }

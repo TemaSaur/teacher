@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi import Request, APIRouter, UploadFile, Form, Query, Response
-# from fastapi.responses import FileResponse
+from collections import defaultdict as dd
 from config import server
 from models.file import File
 from models.material import Material
@@ -15,7 +15,10 @@ def materials(request: Request,
 		quarter: Annotated[str | None, Query(alias="quarter")] = None):
 	materials = None
 	if clas is not None and quarter is not None:
-		materials = MaterialFile.get_filtered(server.conn, clas, quarter)
+		materials_db = MaterialFile.get_filtered(server.conn, clas, quarter)
+		materials = dd(list)
+		for material in materials_db:
+			materials[material["material"].topic].append(material)
 
 	context = {
 		"materials": materials,
@@ -33,7 +36,8 @@ def materials(request: Request,
 async def create(file: UploadFile,
 		title: str = Form(),
 		clas: int = Form(),
-		quarter: int = Form()):
+		quarter: int = Form(),
+		topic: str = Form()):
 	f = await File.read(file)
 	f.upload(server.conn)
 
@@ -43,6 +47,7 @@ async def create(file: UploadFile,
 	material.link_url = None
 	material.clas = clas
 	material.quarter = quarter
+	material.topic = topic
 
 	material.create(server.conn)
 
