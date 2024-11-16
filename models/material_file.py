@@ -11,19 +11,20 @@ class MaterialFile(Model):
 	@staticmethod
 	def get_filtered(conn: Connection, clas: int, quarter: int):
 		sql = """
-		SELECT S.id, title, file_id, link_url, class, quarter, fsize, fname
+		SELECT S.id, title, file_id, link_url, class, quarter, topic, fsize, fname
 		FROM
 			study_materials AS S
 			LEFT JOIN files AS F ON S.file_id = F.id
 		WHERE S.class = %s AND S.quarter = %s
+		ORDER BY topic
 		"""
 
 		with conn.cursor() as cur:
 			cur.execute(sql, (clas, quarter))
 
 			return [{
-				"material": Material(x[:6]),
-				"file": File(id=x[2], fsize=x[6], fname=x[7])
+				"material": Material(x[:7]),
+				"file": File(id=x[2], fsize=x[7], fname=x[8])
 			} for x in cur.fetchall()]
 
 	@staticmethod
