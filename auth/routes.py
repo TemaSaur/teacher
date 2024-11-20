@@ -17,6 +17,13 @@ def you_shall_not_pass():
 	return response
 
 
+def you_shall_pass(email: str):
+	token = jwt.issue(email)
+	response = RedirectResponse("/account", status_code=303)
+	response.set_cookie(key="token", value=token, expires=jwt.TTL)
+	return response
+
+
 @router.get("/account")
 def account(request: Request, token: Annotated[str | None, Cookie()] = None):
 	if token is None:
@@ -33,10 +40,14 @@ def account(request: Request, token: Annotated[str | None, Cookie()] = None):
 
 
 @router.get("/login")
-def login_page(request: Request):
+def login_page(request: Request, error: str | None = None):
+	context = {}
+	if error == 'wrongpassword':
+		context['error'] = 'Неверный пароль'
 	return server.jinja.TemplateResponse(
 		request=request,
-		name="login.html"
+		name="login.html",
+		context=context
 	)
 
 
@@ -56,7 +67,10 @@ def register_page(request: Request, error: str | None = None):
 def login(request: Request,
 		email: EmailStr = Form(),
 		password: str = Form()):
-	return 'ok'
+	user = User.get_by_email(server.conn, email)
+	if not pwd_helper.check(password, user.password_hash):
+		return RedirectResponse("/login?error=wrongpassword", status_code=303)
+	return you_shall_pass(email)
 
 
 @router.post("/register")
@@ -80,7 +94,9 @@ def register(request: Request,
 	)
 	user.create(server.conn)
 
-	token = jwt.issue(email)
-	response = RedirectResponse("/account", status_code=303)
-	response.set_cookie(key="token", value=token, expires=jwt.TTL)
-	return response
+	return you_shall_pass(user.email)
+
+
+@router.get("/logout")
+def logout():
+	return you_shall_not_pass()
