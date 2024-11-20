@@ -60,3 +60,6 @@ main {
 	box-shadow: #00000010 0 0 1rem;
 }
 
+a.link {
+	color: var(--accent);
+}
