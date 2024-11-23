@@ -7,7 +7,7 @@ from models.test import Test
 from tests.helpers import test_json as json_helper
 
 
-router = APIRouter()
+router = APIRouter(tags=["Tests"])
 
 
 @router.get("/tests")

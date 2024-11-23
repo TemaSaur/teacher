@@ -8,7 +8,7 @@ from auth.helpers import password as pwd_helper
 from models.user import User
 
 
-router = APIRouter()
+router = APIRouter(tags=["Auth"])
 
 
 def you_shall_not_pass():

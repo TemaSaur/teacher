@@ -6,7 +6,7 @@ from models.file import File
 from models.material import Material
 from models.material_file import MaterialFile
 
-router = APIRouter()
+router = APIRouter(tags=["Materials"])
 
 
 @router.get("/study-materials")
