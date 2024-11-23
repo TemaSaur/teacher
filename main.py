@@ -10,6 +10,7 @@ import pymysql
 
 import materials.routes
 import auth.routes
+import tests.routes
 
 
 load_dotenv(".env")
@@ -43,14 +44,7 @@ def index(request: Request, name: str | None = None):
 
 app.include_router(materials.routes.router)
 app.include_router(auth.routes.router)
-
-
-@app.get("/tests")
-def tests(request: Request):
-	return server.jinja.TemplateResponse(
-		request=request,
-		name="tests.html"
-	)
+app.include_router(tests.routes.router)
 
 
 @app.get("/data")
