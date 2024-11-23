@@ -46,15 +46,3 @@ app.include_router(materials.routes.router)
 app.include_router(auth.routes.router)
 app.include_router(tests.routes.router)
 
-
-@app.get("/data")
-def data():
-	return User.get_all(conn)
-
-
-@app.post("/upload")
-async def upload(file: UploadFile):
-	f = await File.read(file)
-	f.upload(conn)
-	conn.commit()
-	return f.id
