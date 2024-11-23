@@ -16,24 +16,11 @@
 		{% include "header.html" %}
 		<main class="container">
 			<h1>Тестовые задания</h1>
-			<form action="">
-				<div class="radio class-radio">
-					<p>Класс:</p>
-					<input type="radio" name="class" id="class-6"><label for="class-6">6</label>
-					<input type="radio" name="class" id="class-7"><label for="class-7">7</label>
-					<input type="radio" name="class" id="class-8"><label for="class-8">8</label>
-					<input type="radio" name="class" id="class-9"><label for="class-9">9</label>
-				</div>
 
-				<div class="radio quarter-radio">
-					<p>Четверть:</p>
-					<input type="radio" name="quarter" id="quarter-1"><label for="quarter-1">I</label>
-					<input type="radio" name="quarter" id="quarter-2"><label for="quarter-2">II</label>
-					<input type="radio" name="quarter" id="quarter-3"><label for="quarter-3">III</label>
-					<input type="radio" name="quarter" id="quarter-4"><label for="quarter-4">IV</label>
-				</div>
-			</form>
-
+			{% with action="/tests" %}
+				{% include "filter_form.html" %}
+			{% endwith %}
+			
 		</main>
 		{% include "footer.html" %}
 	</body>
