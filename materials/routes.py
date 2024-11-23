@@ -21,7 +21,7 @@ def materials(request: Request,
 			materials[material["material"].topic].append(material)
 
 	context = {
-		"materials": materials,
+		"results": materials,
 		"class": clas,
 		"quarter": quarter,
 	}
