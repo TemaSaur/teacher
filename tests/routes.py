@@ -1,8 +1,10 @@
-from fastapi import Request, APIRouter, Form, Query
+from fastapi import Request, APIRouter, Form, Query, HTTPException
 from typing import Annotated
 from collections import defaultdict as dd
+import json
 from config import server
 from models.test import Test
+from tests.helpers import test_json as json_helper
 
 
 router = APIRouter()
@@ -39,6 +41,9 @@ def create(
 	topic: str = Form(),
 	test_data: str = Form()
 ):
+	if not json_helper.is_valid_test(test_data):
+		return HTTPException(status_code=422, detail="invalid test json")
+
 	test = Test(
 		name=name,
 		clas=clas,
@@ -48,3 +53,8 @@ def create(
 	)
 
 	return test.create(server.conn)
+
+@router.get("/test/{id}")
+def get_one(id: int):
+	test = json.loads(Test.get_one(server.conn, id).test_data)
+	return test
