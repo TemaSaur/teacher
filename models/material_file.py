@@ -23,7 +23,7 @@ class MaterialFile(Model):
 			cur.execute(sql, (clas, quarter))
 
 			return [{
-				"material": Material(x[:7]),
+				"material": Material(*x[:7]),
 				"file": File(id=x[2], fsize=x[7], fname=x[8])
 			} for x in cur.fetchall()]
 

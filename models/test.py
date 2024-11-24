@@ -1,17 +1,18 @@
 from .model import Model
 from pymysql import Connection
-import json
 
-# CREATE TABLE tests (
-# 	id        INT     NOT NULL AUTO_INCREMENT,
-# 	name      TEXT    NOT NULL,
-# 	class     TINYINT NOT NULL,
-# 	quarter   TINYINT NOT NULL,
-# 	topic     TEXT    NOT NULL,
-# 	test_data JSON    NOT NULL,
-#
-# 	PRIMARY KEY(id)
-# );
+"""
+CREATE TABLE tests (
+	id        INT     NOT NULL AUTO_INCREMENT,
+	name      TEXT    NOT NULL,
+	class     TINYINT NOT NULL,
+	quarter   TINYINT NOT NULL,
+	topic     TEXT    NOT NULL,
+	test_data JSON    NOT NULL,
+
+	PRIMARY KEY(id)
+);
+"""
 
 class Test(Model):
 	id: int

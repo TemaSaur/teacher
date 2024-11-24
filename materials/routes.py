@@ -41,13 +41,14 @@ async def create(file: UploadFile,
 	f = await File.read(file)
 	f.upload(server.conn)
 
-	material = Material()
-	material.title = title
-	material.file_id = f.id
-	material.link_url = None
-	material.clas = clas
-	material.quarter = quarter
-	material.topic = topic
+	material = Material(
+		title=title,
+		file_id=f.id,
+		link_url=None,
+		clas=clas,
+		quarter=quarter,
+		topic=topic,
+	)
 
 	material.create(server.conn)
 
