@@ -20,10 +20,13 @@ class TestData(BaseModel):
 test_ta = TypeAdapter(TestData)
 
 
+def get_data(json_text: str) -> TestData:
+	return test_ta.validate_python(json.loads(json_text))
+
+
 def is_valid_test(json_text: str) -> bool:
 	try:
-		data = json.loads(json_text)
-		test_ta.validate_python(data)
+		get_data(json_text)
 	except Exception:
 		return False
 	else:

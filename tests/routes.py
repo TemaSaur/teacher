@@ -1,7 +1,6 @@
 from fastapi import Request, APIRouter, Form, Query, HTTPException
 from typing import Annotated
 from collections import defaultdict as dd
-import json
 from config import server
 from models.test import Test
 from tests.helpers import test_json as json_helper
@@ -54,7 +53,14 @@ def create(
 
 	return test.create(server.conn)
 
-@router.get("/test/{id}")
-def get_one(id: int):
-	test = json.loads(Test.get_one(server.conn, id).test_data)
-	return test
+@router.get("/tests/{id}")
+def get_one(request: Request, id: int):
+	context = {
+		"test": json_helper.get_data(Test.get_one(server.conn, id).test_data)
+	}
+
+	return server.jinja.TemplateResponse(
+		request=request,
+		name="test.html",
+		context=context
+	)
