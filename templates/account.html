@@ -19,7 +19,21 @@
 			
 			<p>Привет, {{ first_name }} {{ last_name }}!</p>
 
-			<a href="/logout">Выйти</a>
+			<form class="file-form" action="/send" method="POST">
+				<p>Отправьте работу в формате PDF</p>
+				<input type="file">
+				<label for="comment">Комментарий о работе</label>
+				<textarea
+					name="comment"
+					id="comment"
+					rows="3"
+					accept=".pdf,.doc,.docx,.jpg,.png"
+				></textarea>
+				<input type="submit" value="Отправить работу">
+			</form>
+
+
+			<a href="/logout" class="submit">Выйти</a>
 		</main>
 		{% include "footer.html" %}
 	</body>
