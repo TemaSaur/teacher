@@ -53,8 +53,8 @@ def parse(data: io.TextIOBase | str):
 
 
 if __name__ == "__main__":
-	with open('./cases/test1.txt') as f:
+	with open('./cases/test2.txt') as f:
 		res = parse(f)
-	with open('test1.json', 'w', encoding="utf-8") as f:
+	with open('test2.json', 'w', encoding="utf-8") as f:
 		f.write(json.dumps(res, ensure_ascii=False))
 
