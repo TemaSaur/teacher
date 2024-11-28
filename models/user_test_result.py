@@ -18,14 +18,17 @@ class UserTestResult(Model):
 			, TR.user_id
 			, TR.score
 			, TR.max_score
-			, TR.sent_at,
-			, U.id,
-			, U.first_name,
-			, U.last_name,
-			, U.email,
-			, U.id,
+			, TR.sent_at
+			, U.id
+			, U.first_name
+			, U.last_name
+			, U.email
+			, U.password_hash
+			, U.class
 		FROM test_results AS TR
 			LEFT JOIN users AS U ON TR.user_id = U.id
+		ORDER BY TR.sent_at DESC
+		LIMIT 10;
 		"""
 		with conn.cursor() as cur:
 			cur.execute(sql)
