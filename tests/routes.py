@@ -82,7 +82,6 @@ async def check(request: Request, id: int, token: str | None = Cookie()):
 
 	if (validate := jwt.validate(token)) and (email := validate['sub']):
 		user = User.get_by_email(server.conn, email).__dict__
-		print(user)
 
 		test_result = TestResult(
 			test_id=id,
