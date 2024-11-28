@@ -15,29 +15,11 @@
 	<body class="page">
 		{% include "header.html" %}
 		<main class="container">
-			<h1>Личный кабинет</h1>
+			<h1>Отправлено</h1>
 			
-			<p>Привет, {{ first_name }} {{ last_name }}!</p>
+			<p>Спасибо за отправку!</p>
 
-			<form class="file-form" action="/send" method="POST" enctype="multipart/form-data">
-				<p>Отправьте работу в формате PDF</p>
-				<input
-					type="file"
-					name="file"
-					id="file"
-					accept=".pdf,.doc,.docx,.jpg,.png"
-				>
-				<label for="comment">Комментарий о работе</label>
-				<textarea
-					name="comment"
-					id="comment"
-					rows="3"
-				></textarea>
-				<input type="submit" value="Отправить работу">
-			</form>
-
-
-			<a href="/logout" class="submit">Выйти</a>
+			<a href="/" class="submit">На главную</a>
 		</main>
 		{% include "footer.html" %}
 	</body>

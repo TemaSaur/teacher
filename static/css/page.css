@@ -38,7 +38,6 @@ form {
 	background: #00000004;
 	box-shadow: #00000020 0 2px 2px;
 	border-radius: .4rem;
-
 }
 
 .submit {
@@ -120,4 +119,25 @@ div[data-topic-results] {
 
 div[data-topic-results].shown {
 	display: block;
+}
+
+.file-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: .5rem;
+	margin: 3rem 0;
+}
+.file-form > * {
+	width: 280px;
+}
+
+.file-form textarea {
+	padding: .4rem;
+}
+
+.file-form input[type="submit"] {
+	width: fit-content;
+	padding: .2rem .5rem;
+	font-family: Prata;
 }
