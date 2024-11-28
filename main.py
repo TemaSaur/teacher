@@ -10,6 +10,7 @@ import materials.routes
 import auth.routes
 import tests.routes
 import sends.routes
+import admin.routes
 
 
 load_dotenv(".env")
@@ -45,4 +46,5 @@ app.include_router(materials.routes.router)
 app.include_router(auth.routes.router)
 app.include_router(tests.routes.router)
 app.include_router(sends.routes.router)
+app.include_router(admin.routes.router)
 
