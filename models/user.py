@@ -33,7 +33,7 @@ class User(Model):
 		password_hash=None,
 		clas=None
 	):
-		self.id = None
+		self.id = id
 		self.first_name = first_name
 		self.last_name = last_name
 		self.email = email

@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Form, Request, Cookie, Response
+from fastapi import APIRouter, Form, Request, Cookie
 from fastapi.responses import RedirectResponse
 from pydantic import EmailStr
 from config import server
@@ -28,7 +28,10 @@ def you_shall_pass(email: str):
 def account(request: Request, token: Annotated[str | None, Cookie()] = None):
 	if token is None:
 		return you_shall_not_pass()
-	email = jwt.validate(token)['sub']
+	valid = jwt.validate(token)
+	if not valid:
+		return you_shall_not_pass()
+	email = valid['sub']
 	if not email:
 		return you_shall_not_pass()
 	user = User.get_by_email(server.conn, email).__dict__

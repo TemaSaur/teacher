@@ -19,33 +19,8 @@
 		<main class="container">
 			<h1>Тест № {{ test.headers.number }} на тему "{{ test.headers.topic }}"</h1>
 
-			<form id="questions" action="?" method="POST">
-				{% set option_id = namespace(value=0) %}
-				{% for q in test.questions %}
-					{% set question_number = loop.index %}
-					<div class="question">
-						<p class="wording">{{question_number}}. {{ q.wording }}</p>
-
-						<div class="options">
-							{% for option in q.options %}
-								<p class="option">
-									<input
-										type="radio"
-										name="{{ question_number }}"
-										id="{{ option_id.value }}"
-										value="{{ loop.index }}"
-										required>
-									<label for="{{ option_id.value }}">{{ option }}</label>
-								</p>
-								{% set option_id.value = option_id.value + 1 %}
-							{% endfor %}
-						</div>
-
-					</div>
-				{% endfor %}
-				
-				<input type="submit" value="Отправить">
-			</form>
+			<p>Результат:</p>
+			<p style="font-size: 1.5rem">{{ right }} / {{ max }}</p>
 		</main>
 		{% include "footer.html" %}
 	</body>

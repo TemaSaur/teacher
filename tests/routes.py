@@ -1,10 +1,12 @@
-from fastapi import Request, APIRouter, Form, Query, HTTPException
+from fastapi import Request, APIRouter, Form, Query, HTTPException, Cookie
 from typing import Annotated
 from collections import defaultdict as dd
 from config import server
 from models.test import Test
+from models.user import User
+from models.test_result import TestResult
 from tests.helpers import test_json as json_helper
-
+from auth.helpers import jwt
 
 router = APIRouter(tags=["Tests"])
 
@@ -53,6 +55,7 @@ def create(
 
 	return test.create(server.conn)
 
+
 @router.get("/tests/{id}")
 def get_one(request: Request, id: int):
 	context = {
@@ -62,5 +65,40 @@ def get_one(request: Request, id: int):
 	return server.jinja.TemplateResponse(
 		request=request,
 		name="test.html",
+		context=context
+	)
+
+
+@router.post("/tests/{id}")
+async def check(request: Request, id: int, token: str | None = Cookie()):
+	test = json_helper.get_data(Test.get_one(server.conn, id).test_data)
+	form = await request.form()
+
+	answers = [int(form[x]) for x in form]
+	rights = [x.right for x in test.questions]
+
+	right_count = sum(1 if a == r else 0 for a, r in zip(answers, rights))
+	max_count = len(test.questions)
+
+	if (validate := jwt.validate(token)) and (email := validate['sub']):
+		user = User.get_by_email(server.conn, email).__dict__
+		print(user)
+
+		test_result = TestResult(
+			test_id=id,
+			user_id=user["id"],
+			score=right_count,
+			max_score=max_count
+		)
+		test_result.save(server.conn)
+
+	context = {
+		"test": test,
+		"right": right_count,
+		"max": max_count,
+	}
+	return server.jinja.TemplateResponse(
+		request=request,
+		name="test_results.html",
 		context=context
 	)

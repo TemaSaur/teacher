@@ -1,10 +1,8 @@
-from fastapi import FastAPI, Request, UploadFile
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
 import os
-from models.user import User
-from models.file import File
 from config import server
 import pymysql
 
