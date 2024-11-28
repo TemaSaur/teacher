@@ -77,7 +77,7 @@ form {
 	gap: 1rem;
 }
 
-.material {
+.result {
 	display: flex;
 	align-items: center;
 	gap: 1rem;
@@ -85,31 +85,31 @@ form {
 	margin-bottom: .7rem;
 }
 
-.material:hover,
-p[data-topic]:hover {
+.result:hover,
+a[data-topic]:hover {
 	color: #000000a0;
 }
 
-.material span {
+.result span {
 	font-size: 2rem;
 	width: 2rem;
 }
 
-p[data-topic] {
+a[data-topic] {
 	cursor: pointer;
 }
 
-p[data-topic] span {
+a[data-topic] span {
 	display: inline-block;
 	transform: scale(2.5, 1.5) translate(.6em, -.2em) rotate(180deg);
 }
 
-p[data-topic] span {
+a[data-topic] span {
 	display: inline-block;
 	transform: scale(2.5, 1.5) translate(.6em, -.2em) rotate(180deg);
 }
 
-p[data-topic].active span {
+a[data-topic].active span {
 	display: inline-block;
 	transform: scale(2.5, 1.5) translate(.6em, .1em);
 }

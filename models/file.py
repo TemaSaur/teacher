@@ -20,12 +20,14 @@ class File(Model):
 	fsize: int
 	fdata: bytes
 
-	def __init__(self,
-			fetched: tuple | None = None,
-			id: uuid.UUID | str | None = None,
-			fname: str | None = None,
-			fsize: int | None = None,
-			fdata: bytes | None = None):
+	def __init__(
+		self,
+		fetched: tuple | None = None,
+		id: uuid.UUID | str | None = None,
+		fname: str | None = None,
+		fsize: int | None = None,
+		fdata: bytes | None = None
+	):
 		if fetched is not None:
 			self.id = fetched[0]
 			self.fname = fetched[1]
@@ -54,8 +56,10 @@ class File(Model):
 
 	def upload(self, conn: Connection):
 		sql = """
-		INSERT INTO files (id, fname, fsize, fdata)
-		VALUES (%s, %s, %s, %s);
+		INSERT INTO files
+			(id, fname, fsize, fdata)
+		VALUES
+			(%s, %s, %s, %s);
 		"""
 		uid = uuid.uuid4()
 		with conn.cursor() as cur:

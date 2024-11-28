@@ -6,7 +6,7 @@ from models.file import File
 from models.material import Material
 from models.material_file import MaterialFile
 
-router = APIRouter()
+router = APIRouter(tags=["Materials"])
 
 
 @router.get("/study-materials")
@@ -21,7 +21,7 @@ def materials(request: Request,
 			materials[material["material"].topic].append(material)
 
 	context = {
-		"materials": materials,
+		"results": materials,
 		"class": clas,
 		"quarter": quarter,
 	}
@@ -41,13 +41,14 @@ async def create(file: UploadFile,
 	f = await File.read(file)
 	f.upload(server.conn)
 
-	material = Material()
-	material.title = title
-	material.file_id = f.id
-	material.link_url = None
-	material.clas = clas
-	material.quarter = quarter
-	material.topic = topic
+	material = Material(
+		title=title,
+		file_id=f.id,
+		link_url=None,
+		clas=clas,
+		quarter=quarter,
+		topic=topic,
+	)
 
 	material.create(server.conn)
 

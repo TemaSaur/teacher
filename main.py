@@ -1,15 +1,14 @@
-from fastapi import FastAPI, Request, UploadFile
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
 import os
-from models.user import User
-from models.file import File
 from config import server
 import pymysql
 
 import materials.routes
 import auth.routes
+import tests.routes
 
 
 load_dotenv(".env")
@@ -43,24 +42,5 @@ def index(request: Request, name: str | None = None):
 
 app.include_router(materials.routes.router)
 app.include_router(auth.routes.router)
+app.include_router(tests.routes.router)
 
-
-@app.get("/tests")
-def tests(request: Request):
-	return server.jinja.TemplateResponse(
-		request=request,
-		name="tests.html"
-	)
-
-
-@app.get("/data")
-def data():
-	return User.get_all(conn)
-
-
-@app.post("/upload")
-async def upload(file: UploadFile):
-	f = await File.read(file)
-	f.upload(conn)
-	conn.commit()
-	return f.id
