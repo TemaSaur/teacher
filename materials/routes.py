@@ -1,6 +1,7 @@
 from typing import Annotated
 from fastapi import Request, APIRouter, UploadFile, Form, Query, Response
 from collections import defaultdict as dd
+import urllib.parse
 from config import server
 from models.file import File
 from models.material import Material
@@ -57,9 +58,10 @@ async def create(file: UploadFile,
 @router.get("/study-materials/{id}/download")
 async def download(id: int):
 	data = MaterialFile.get_file(server.conn, id)
+	fname = urllib.parse.quote(data.fname)
 	return Response(
 		content=data.fdata,
 		media_type="application/octet-stream",
-		headers={"Content-Disposition": f"attachment; filename={data.fname}"}
+		headers={"Content-Disposition": f"attachment; filename={fname}"}
 	)
 
