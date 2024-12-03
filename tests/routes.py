@@ -1,4 +1,5 @@
 from fastapi import Request, APIRouter, Form, Query, HTTPException, Cookie
+from fastapi.responses import RedirectResponse
 from typing import Annotated
 from collections import defaultdict as dd
 from config import server
@@ -57,7 +58,9 @@ def create(
 
 
 @router.get("/tests/{id}")
-def get_one(request: Request, id: int):
+def get_one(request: Request, id: int, token: Annotated[str | None, Cookie()] = None):
+	if token is None:
+		return RedirectResponse("/login?error=testnoaccount", status_code=303)
 	context = {
 		"test": json_helper.get_data(Test.get_one(server.conn, id).test_data)
 	}

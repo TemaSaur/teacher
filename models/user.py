@@ -60,7 +60,9 @@ class User(Model):
 		"""
 		with conn.cursor() as cur:
 			cur.execute(sql, (email,))
-			return User(*cur.fetchone())
+			if res := cur.fetchone():
+				return User(*res)
+			return None
 
 	def create(self, conn: Connection):
 		sql = """
