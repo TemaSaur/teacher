@@ -34,7 +34,10 @@ def account(request: Request, token: Annotated[str | None, Cookie()] = None):
 	email = valid['sub']
 	if not email:
 		return you_shall_not_pass()
-	user = User.get_by_email(server.conn, email).__dict__
+	user = User.get_by_email(server.conn, email)
+	if not user:
+		return you_shall_not_pass()
+	user = user.__dict__
 	return server.jinja.TemplateResponse(
 		request=request,
 		name="account.html",
@@ -47,6 +50,8 @@ def login_page(request: Request, error: str | None = None):
 	context = {}
 	if error == 'wrongpassword':
 		context['error'] = 'Неверный пароль'
+	if error == 'testnoaccount':
+		context['error'] = 'Войдите, чтобы решать тесты'
 	return server.jinja.TemplateResponse(
 		request=request,
 		name="login.html",
