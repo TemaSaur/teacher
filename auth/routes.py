@@ -88,7 +88,7 @@ def register(request: Request,
 		first_name: str = Form(),
 		last_name: str = Form(),
 		clas: int = Form(alias="class")):
-	if User.get_by_email(server.conn, email).email:
+	if User.get_by_email(server.conn, email):
 		return RedirectResponse("/register?error=emailtaken", status_code=303)
 
 	password_hash = pwd_helper.hash(password)
